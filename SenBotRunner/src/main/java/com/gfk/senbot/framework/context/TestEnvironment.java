@@ -325,7 +325,7 @@ public class TestEnvironment {
     }
 
     /**
-     * @return The test environment setting as printable stgring
+     * @return The test environment setting as printable string
      */
     public String toPrettyString() {
         StringBuilder builder = new StringBuilder();
@@ -367,7 +367,12 @@ public class TestEnvironment {
             capability.setCapability(CapabilityType.UNEXPECTED_ALERT_BEHAVIOUR, UnexpectedAlertBehaviour.ACCEPT);
             capability.setVersion(browserVersion);
             capability.setPlatform(os);
-
+            // Set BrowserStack specific environment only if browserstack is used - see also: https://www.browserstack.com/automate/java
+            if( seleniumManager.getSeleniumHub().toString().indexOf("browserstack") >= 0) {
+            	capability.setCapability("browserstack.debug", "true");
+            }
+            
+            
             driver = new Augmenter().augment(new RemoteWebDriver(seleniumManager.getSeleniumHub(), capability));
         } else {
 
